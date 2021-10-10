@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "902147175120",
+    "project_id": "fire-truck-iot",
+    "storage_bucket": "fire-truck-iot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902147175120:android:5b378da07c92bfa0a824d5",
+        "android_client_info": {
+          "package_name": "com.fire.truck.fire_truck_iot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902147175120-mnke6p15m6514v8vr2p7tk85rphs4hv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5hDSAaTlKmn_Sg6DJsUD-3PwduY_sogQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902147175120-mnke6p15m6514v8vr2p7tk85rphs4hv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
