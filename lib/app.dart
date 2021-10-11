@@ -1,7 +1,6 @@
 import 'package:fire_truck_iot/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyApp extends StatelessWidget {
@@ -12,14 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(scaffoldBackgroundColor: const Color(0xE39621E5)),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData(scaffoldBackgroundColor: const Color.fromRGBO(230, 138, 0, 1)),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -69,17 +68,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           //Texts and Styling of them
           const Text(
-            'Welcome to TGD !',
+            'Welcome to Fire Truck!',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white, fontSize: 28),
           ),
           const SizedBox(height: 20),
           const SizedBox(
-            width: 320,
+            width: 350,
             child: Text(
-              'A one-stop portal for you to learn the latest technologies from SCRATCH',
+              '🌲 It is your job to protect our forest 🌲\n'
+              '🔥🔥Locate and extinguish fires 🔥🔥\n'
+                  '🎯 Use the crane to find the right spot 🎯\n',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Montserrat'),
             ),
           ),
           const SizedBox(
@@ -92,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 50,
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => LoginScreen()));
+                  MaterialPageRoute(builder: (_) => const LoginScreen()));
             },
             color: logoGreen,
             child: Row(
@@ -120,9 +121,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final Color primaryColor = const Color(0xff18203d);
+  final Color primaryColor = const Color.fromRGBO(77, 148, 255, 1.0);
 
-  final Color secondaryColor = const Color(0xff232c51);
+  final Color secondaryColor = Colors.green;
 
   final Color logoGreen = const Color(0xff25bcbb);
 
@@ -153,17 +154,17 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Sign in to TGD and continue',
+                  'Sign in to Fire Truck',
                   textAlign: TextAlign.center,
                   style:
                   GoogleFonts.openSans(color: Colors.white, fontSize: 28),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Enter your email and password below to continue to the The Growing Developer and let the learning begin!',
+                  '🔥🌲',
                   textAlign: TextAlign.center,
                   style:
-                  GoogleFonts.openSans(color: Colors.white, fontSize: 14),
+                  GoogleFonts.openSans(color: Colors.white, fontSize: 34),
                 ),
                 const SizedBox(
                   height: 50,
@@ -177,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   elevation: 0,
                   minWidth: double.maxFinite,
                   height: 50,
-                  onPressed: () {_login();},
+                  onPressed: () {_signIn(context, email, password);},
                   color: logoGreen,
                   child: const Text('Login',
                       style: TextStyle(color: Colors.white, fontSize: 16)),
@@ -188,14 +189,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   elevation: 0,
                   minWidth: double.maxFinite,
                   height: 50,
-                  onPressed: () {_signUp();},
-                  color: Colors.blue,
+                  onPressed: () {_signUp(email, password);},
+                  color: logoGreen,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const <Widget>[
-                      Icon(FontAwesomeIcons.google),
                       SizedBox(width: 10),
-                      Text('Sign-in using Google',
+                      Text('Sign Up',
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                     ],
                   ),
@@ -239,48 +239,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _login(){
-    signIn(context, email, password);
-  }
+  // _signUp(){
+  //   debugPrint(password);
+  //   firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)
+  //       .then((value) => {
+  //         debugPrint("------------------"),
+  //         debugPrint(value.toString()),
+  //         debugPrint("------------------"),
+  //       });
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+  //   );
+  // }
 
-  _signUp(){
-    debugPrint(password);
-    firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) => {
-          debugPrint("------------------"),
-          debugPrint(value.toString()),
-          debugPrint("------------------"),
-        });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-    );
-  }
-
-  createPopup(BuildContext context, String msg) {
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text(msg),
-        actions: [
-          MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              elevation: 0.5,
-              child: const Text("OK"),
-          )
-        ],
-      );
-    });
-
-  }
-
-  void signIn(BuildContext context, String email, String password) async {
+  void _signIn(BuildContext context, String email, String password) async {
     String errorMessage = '';
 
     try {
-      UserCredential result = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      debugPrint(result.user.toString());
+      await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case "ERROR_EMAIL_ALREADY_IN_USE":
@@ -318,7 +295,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (errorMessage != '') {
-      // return Future.error(errorMessage);
       debugPrint(errorMessage);
       createPopup(context, errorMessage);
       errorMessage = '';
@@ -328,7 +304,63 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     }
+  }
 
+  void _signUp(String email, String password) async {
+    String errorMessage = '';
+
+    try {
+      UserCredential result = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case "ERROR_OPERATION_NOT_ALLOWED":
+        case "operation-not-allowed":
+          errorMessage = "Anonymous accounts are not enabled";
+          break;
+        case "ERROR_WEAK_PASSWORD":
+        case "weak-password":
+          errorMessage = "Your password is too weak";
+          break;
+        case "ERROR_INVALID_EMAIL":
+        case "invalid-email":
+          errorMessage = "Your email is invalid";
+          break;
+        case "ERROR_EMAIL_ALREADY_IN_USE":
+        case "email-already-in-use":
+          errorMessage = "Email is already in use on different account";
+          break;
+
+        default:
+          errorMessage = "An undefined Error happened.";
+      }
+    }
+    if (errorMessage != '') {
+      debugPrint(errorMessage);
+      createPopup(context, errorMessage);
+      errorMessage = '';
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+    }
+  }
+
+  createPopup(BuildContext context, String msg) {
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text(msg),
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            elevation: 0.5,
+            child: const Text("OK"),
+          )
+        ],
+      );
+    });
   }
 
 }
