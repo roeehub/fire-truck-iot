@@ -240,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _login(){
-    signIn(email, password);
+    signIn(context, email, password);
   }
 
   _signUp(){
@@ -257,7 +257,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void signIn(String email, String password) async {
+  createPopup(BuildContext context, String msg) {
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text(msg),
+        actions: [
+          MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              elevation: 0.5,
+              child: const Text("OK"),
+          )
+        ],
+      );
+    });
+
+  }
+
+  void signIn(BuildContext context, String email, String password) async {
     String errorMessage = '';
 
     try {
@@ -302,6 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (errorMessage != '') {
       // return Future.error(errorMessage);
       debugPrint(errorMessage);
+      createPopup(context, errorMessage);
       errorMessage = '';
     } else {
       Navigator.push(
