@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,18 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(scaffoldBackgroundColor: const Color(0xE39621E5)),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -48,18 +39,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  get logoGreen => const Color(0x189C1DFF);
 
   @override
   Widget build(BuildContext context) {
@@ -70,46 +51,170 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      // appBar: AppBar(
+      //   // Here we take the value from the MyHomePage object that was created by
+      //   // the App.build method, and use it to set our appbar title.
+      //   title: Text(widget.title),
+      // ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          //We take the image from the assets
+          Image.asset(
+            'assets/images/fire_truck_no_background_img.png',
+            height: 250,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          //Texts and Styling of them
+          const Text(
+            'Welcome to TGD !',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: 28),
+          ),
+          const SizedBox(height: 20),
+          const SizedBox(
+            width: 320,
+            child: Text(
+              'A one-stop portal for you to learn the latest technologies from SCRATCH',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          //Our MaterialButton which when pressed will take us to a new screen named as
+          //LoginScreen
+          MaterialButton(
+            elevation: 0,
+            height: 50,
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => LoginScreen()));
+            },
+            color: logoGreen,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const <Widget>[
+                Text('Get Started',
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
+                Icon(Icons.arrow_forward_ios)
+              ],
+            ),
+            textColor: Colors.white,
+          )
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    );
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  final Color primaryColor = const Color(0xff18203d);
+  final Color secondaryColor = const Color(0xff232c51);
+
+  final Color logoGreen = const Color(0xff25bcbb);
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
+        backgroundColor: primaryColor,
+        body: Container(
+          alignment: Alignment.topCenter,
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Sign in to TGD and continue',
+                  textAlign: TextAlign.center,
+                  style:
+                  GoogleFonts.openSans(color: Colors.white, fontSize: 28),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Enter your email and password below to continue to the The Growing Developer and let the learning begin!',
+                  textAlign: TextAlign.center,
+                  style:
+                  GoogleFonts.openSans(color: Colors.white, fontSize: 14),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                _buildTextField(
+                    nameController, Icons.account_circle, 'Username'),
+                const SizedBox(height: 20),
+                _buildTextField(passwordController, Icons.lock, 'Password'),
+                const SizedBox(height: 30),
+                MaterialButton(
+                  elevation: 0,
+                  minWidth: double.maxFinite,
+                  height: 50,
+                  onPressed: () {},
+                  color: logoGreen,
+                  child: const Text('Login',
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                  textColor: Colors.white,
+                ),
+                const SizedBox(height: 20),
+                MaterialButton(
+                  elevation: 0,
+                  minWidth: double.maxFinite,
+                  height: 50,
+                  onPressed: () {
+                    //Here goes the logic for Google SignIn discussed in the next section
+                  },
+                  color: Colors.blue,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Icon(FontAwesomeIcons.google),
+                      SizedBox(width: 10),
+                      Text('Sign-in using Google',
+                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                    ],
+                  ),
+                  textColor: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  _buildTextField(
+      TextEditingController controller, IconData icon, String labelText) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: secondaryColor, border: Border.all(color: Colors.blue)),
+      child: TextField(
+        controller: controller,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            labelText: labelText,
+            labelStyle: const TextStyle(color: Colors.white),
+            icon: Icon(
+              icon,
+              color: Colors.white,
+            ),
+            // prefix: Icon(icon),
+            border: InputBorder.none),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
