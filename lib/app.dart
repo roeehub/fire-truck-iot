@@ -240,43 +240,77 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _login(){
-    print(email);
-    firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    signIn(email, password);
   }
 
   _signUp(){
-    print(password);
-    firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    debugPrint(password);
+    firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) => {
+          debugPrint("------------------"),
+          debugPrint(value.toString()),
+          debugPrint("------------------"),
+        });
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const WelcomeScreen()),
     );
   }
 
-  _popUpDialog(BuildContext context, String title, String msg) {
+  void signIn(String email, String password) async {
+    String errorMessage = '';
 
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () {Navigator.of(context).pop();},
-    );
+    try {
+      UserCredential result = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      debugPrint(result.user.toString());
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case "ERROR_EMAIL_ALREADY_IN_USE":
+        case "account-exists-with-different-credential":
+        case "email-already-in-use":
+          errorMessage = "Email already used. Go to login page.";
+          break;
+        case "ERROR_WRONG_PASSWORD":
+        case "wrong-password":
+          errorMessage = "Wrong email/password combination.";
+          break;
+        case "ERROR_USER_NOT_FOUND":
+        case "user-not-found":
+          errorMessage = "No user found with this email.";
+          break;
+        case "ERROR_USER_DISABLED":
+        case "user-disabled":
+          errorMessage = "User disabled.";
+          break;
+        case "ERROR_TOO_MANY_REQUESTS":
+        case "operation-not-allowed":
+          errorMessage = "Too many requests to log into this account.";
+          break;
+        case "ERROR_OPERATION_NOT_ALLOWED":
+          errorMessage = "Server error, please try again later.";
+          break;
+        case "ERROR_INVALID_EMAIL":
+        case "invalid-email":
+          errorMessage = "Email address is invalid.";
+          break;
+        default:
+          errorMessage = "Login failed. Please try again.";
+          break;
+      }
+    }
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text(title),
-      content: Text(msg),
-      actions: [
-        okButton,
-      ],
-    );
+    if (errorMessage != '') {
+      // return Future.error(errorMessage);
+      debugPrint(errorMessage);
+      errorMessage = '';
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+    }
 
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
+
 }
 
