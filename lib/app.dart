@@ -1,3 +1,4 @@
+import 'package:fire_truck_iot/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -129,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController passwordController = TextEditingController();
 
-  String username = 'Uninitialized username';
+  String email = 'Uninitialized email';
 
   String password = 'Uninitialized password';
 
@@ -216,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onChanged: (value) {
           setState(() {
             if (labelText == "Username"){
-              username = value.trim();
+              email = value.trim();
             } else {
               password = value.trim();
             }
@@ -239,11 +240,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _login(){
-    print(username);
+    print(email);
+    firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
   }
 
   _signUp(){
     print(password);
+    firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+    );
   }
 
   _popUpDialog(BuildContext context, String title, String msg) {
