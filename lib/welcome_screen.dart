@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -37,13 +38,18 @@ class WelcomeScreenState extends State<WelcomeScreen> {
           ),
           const SizedBox(height: 250),
           ElevatedButton(
-            onPressed: () async {
-              Future.delayed(const Duration(milliseconds: 100), () async {
-                await LaunchApp.openApp(
-                    androidPackageName: 'com.shevauto.remotexy.free',
-                    openStore: false
-                );
-              });
+            // onPressed: () async {
+            //   Future.delayed(const Duration(milliseconds: 100), () async {
+            //     await LaunchApp.openApp(
+            //         androidPackageName: 'com.shevauto.remotexy.free',
+            //         openStore: false
+            //     );
+            //   });
+            // },
+            onPressed: () {
+              FirebaseFirestore.instance
+                  .collection('data')
+                  .add({'text': 'data added through app'});
             },
             style: ButtonStyle(
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
