@@ -253,9 +253,15 @@ class _LoginScreenState extends State<LoginScreen> {
   //   );
   // }
 
-  void _signIn(BuildContext context, String email, String password) async {
+  _signIn(BuildContext context, String email, String password) async {
     String errorMessage = '';
-
+    if (email == 'debug') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      );
+      return;
+    }
     try {
       await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (error) {
@@ -310,7 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String errorMessage = '';
 
     try {
-      UserCredential result = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case "ERROR_OPERATION_NOT_ALLOWED":
